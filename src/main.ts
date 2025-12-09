@@ -1,87 +1,71 @@
-// let a: unknown;
-// a = 5;
-// if(typeof a === "string") a.toUpperCase();
-
-interface Car {
-  engine: string;
-  color: string;
-  weight?: number;
-  readonly number: string;
+function foo<T>(arr: T[]): T[] {
+    return arr.reverse();
 }
 
-const car: Car = {
-  engine: "v8",
-  color: "red",
-  weight: 2000,
-  number: "ac2020",
+// console.log(foo<number>([1, 2, 3]));
+// console.log(foo<string>(["qwe", "rty", "abc"]));
+
+function foo1<T>(array: T[]): T {
+    const lastIdx = array.length - 1;
+    return array[lastIdx];
+}
+// console.log(foo1<number>([1, 2, 3]));
+// console.log(foo1<string | number>([22, "qwe"]));
+
+// function foo2<T, Y>(a: T, b: Y): void {
+//     console.log(a);
+//     console.log(b);
+// }
+// foo2<number, string>(25, "foo2");
+// foo2<string, number>("banana", 100);
+
+interface HttpResponse<T> {
+    data: T;
+    statusCode: number;
+    message: string;
+}
+
+interface HttpGetData {
+    id: number;
+    surname: string;
+}
+
+interface HttpPostData {
+    id: number;
+    name: string;
+    email: string;
+}
+
+const getResponse: HttpResponse<HttpGetData> = {
+    data: {
+        id: 200,
+        surname: "Alisenko",
+    },
+    statusCode: 200,
+    message: "success",
 };
 
-const car1: Car = {
-  engine: "v4",
-  color: "red",
-  number: "ac2025",
+const postResponse: HttpResponse<HttpPostData> = {
+    data: {
+        id: 300,
+        name: "Alina",
+        email: "test2@gmail.com",
+    },
+    statusCode: 201,
+    message: "created",
 };
 
-// car.color = "blue";
+function getLength<T extends { length: number }>(a: T): number {
+    return a.length;
+}
+getLength("string");
+// getLength(5)
 
-const arr: number[] = [1, 2, 3, 4];
-const arr1: Array<number> = [1, 2, 3, 4];
-
-const arr2: (number | string | boolean)[] = [1, "string", false];
-
-const arr4: Car[] = [car, car1];
-
-// const arr5 = arr4.map(({ engine, color }) => {
-//       return { engine, color };
-
-// });
-
-const arr5 = arr4.map(({ engine, color }) => ({
-  engine,
-  color,
-}));
-
-type PromiseStatus = "pending" | "fulfilled" | "rejected";
-
-let promiseStatus: PromiseStatus = "pending";
-
-promiseStatus = "rejected";
-
-interface PromiseType {
-  status: PromiseStatus;
+function getName<T extends { name: string }>(user: T): string {
+    return user.name;
 }
 
-const promise: PromiseType = {
-  status: "pending",
-};
-
-function func(name: string, age: number): void {
-  console.log(`My name is ${name}, i am ${age} old`);
-}
-
-function func1(name: string, age: number): string {
-  return `My name is ${name}, i am ${age} old`;
-}
-
-const hello = func1("Vadym", 16);
-
-interface User {
-  name: string;
-  age: number;
-  email: string;
-  getName?: () => void;
-}
-
-function func2({ name, age }: User): string {
-  return `My name is ${name}, i am ${age} old`;
-}
-
-const olga: User = {
-  name: "Olga",
-  age: 16,
-  email: "test@gmail.com",
-  getName: () => `My name is ${olga.name}`,
-};
-
-func2(olga);
-if (olga.getName) olga.getName();
+getName({ name: "Ann", age: 20 });
+getName({ name: "John", id: 20 });
+getName({ name: "John", weight: 70, height: 175 });
+getName({ username: "John" }); // error
