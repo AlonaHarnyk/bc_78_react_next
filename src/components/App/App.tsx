@@ -4,13 +4,16 @@ import Section from "../Section/Section.tsx";
 import { useState } from "react";
 
 function App() {
-    const [users, setUsers] = useState(data);
+  const [users, setUsers] = useState(data);
 
-    return (
-        <Section title="List of users">
-            <UserList users={users} />
-        </Section>
-    );
+  const handleDeleteUser = (id: string) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+  };
+  return (
+    <Section title="List of users">
+      <UserList users={users} onDelete={handleDeleteUser} />
+    </Section>
+  );
 }
 
 export default App;
