@@ -1,15 +1,14 @@
 import { data } from "../../data/users.ts";
 import UserList from "../UserList/UserList.tsx";
 import Section from "../Section/Section.tsx";
+import { useState } from "react";
 
 function App() {
+    const [users, setUsers] = useState(data);
+
     return (
         <Section title="List of users">
-            {/* <User userData={data[0]} />
-      <User userData={data[1]} />
-      <User userData={data[2]} />
-      <User userData={data[3]} /> */}
-            <UserList users={data} />
+            <UserList users={users} />
         </Section>
     );
 }
