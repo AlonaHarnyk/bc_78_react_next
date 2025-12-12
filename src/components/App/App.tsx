@@ -11,13 +11,15 @@ function App() {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
   };
 
-  const showUsers = () => {
-    setIsListVisible(true);
+  const toggleUsers = () => {
+    setIsListVisible(!isListVisible);
   };
 
   return (
     <>
-      <button onClick={showUsers}>Show list of users</button>
+      <button onClick={toggleUsers}>
+        {isListVisible ? "Hide users" : "Show list of users"}
+      </button>
       {isListVisible && (
         <Section title="List of users">
           <UserList users={users} onDelete={handleDeleteUser} />
