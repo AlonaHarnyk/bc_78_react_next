@@ -1,7 +1,18 @@
-export default function Filter() {
-  const handleSubmit = (formData: FormData) => {
-    const status = formData.get("status");
-    console.log(status);
+interface Props {
+  onSubmit: (status?: string) => void;
+}
+
+export default function Filter({ onSubmit }: Props) {
+  const handleSubmit = async (formData: FormData) => {
+    const status = formData.get("status") as string;
+
+    if (status) {
+      if (status === "all") {
+        onSubmit();
+      } else {
+        onSubmit(status);
+      }
+    }
   };
 
   return (
