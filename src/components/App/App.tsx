@@ -6,6 +6,7 @@ import Section from "../Section/Section.tsx";
 import Loader from "../Loader/Loader.tsx";
 import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
 import { useState } from "react";
+import AddUserForm from "../AddUserForm/AddUserForm.tsx";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -44,6 +45,7 @@ function App() {
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         <UserList users={users} />
+        <AddUserForm />
       </Section>
 
       {/* )} */}

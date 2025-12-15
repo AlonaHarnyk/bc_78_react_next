@@ -2,19 +2,33 @@ import { useId } from "react";
 
 export default function AddUserForm() {
   const id = useId();
+
+  const handleSubmit = (formData: FormData) => {
+    const userName = formData.get("name") as string;
+    const userAge = formData.get("age") as string;
+    const isOnline = formData.get("isOnline") as string;
+
+    const userData = {
+      name: userName,
+      age: Number(userAge),
+      isOnline: Boolean(isOnline),
+    };
+    console.log(userData);
+  };
+
   return (
     <div>
-      <form>
+      <form action={handleSubmit}>
         <label htmlFor={`name-${id}`}>Name:</label>
-        <input type="text" name="name" id={`name-${id}`} />
+        <input type="text" name="name" id={`name-${id}`} required />
 
         <label htmlFor={`age-${id}`}>Age:</label>
-        <input type="number" name="age" id={`age-${id}`} />
+        <input type="number" name="age" id={`age-${id}`} required />
 
         <fieldset>
           <legend>Is user online:</legend>
           <label>
-            <input type="radio" name="isOnline" value="true" />
+            <input type="radio" name="isOnline" value="true" required />
             Yes
           </label>
           <label>
@@ -22,6 +36,7 @@ export default function AddUserForm() {
             No
           </label>
         </fieldset>
+        <button>Submit</button>
       </form>
     </div>
   );
