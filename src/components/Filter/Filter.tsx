@@ -18,9 +18,6 @@ export default function Filter({ onSubmit }: Props) {
   return (
     <form action={handleSubmit}>
       <select name="status">
-        <option disabled value="">
-          Select status
-        </option>
         <option value="all">All</option>
         <option value="true">Online</option>
         <option value="false">Offline</option>

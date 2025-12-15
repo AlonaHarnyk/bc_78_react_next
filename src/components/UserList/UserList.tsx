@@ -1,17 +1,17 @@
-import type { UserType } from "../types";
-import User from "../User/User";
+import type { User } from "../../types/types";
+import UserItem from "../User/User";
 
 interface Props {
-  users: UserType[];
-  onDelete: (id: string) => void;
+  users: User[];
+  // onDelete: (id: string) => void;
 }
 
-export default function UserList({ users, onDelete }: Props) {
+export default function UserList({ users }: Props) {
   return (
     <ul>
       {users.map((user) => (
         <li key={user.id}>
-          <User userData={user} onDelete={onDelete} />
+          <UserItem userData={user} />
         </li>
       ))}
     </ul>
