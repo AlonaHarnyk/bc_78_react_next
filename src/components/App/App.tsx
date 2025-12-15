@@ -20,7 +20,7 @@ function App() {
 
       const users = await getUsers({ isOnline: status });
       setUsers(users);
-    } catch (error) {
+    } catch {
       setIsError(true);
     } finally {
       setIsLoading(false);
