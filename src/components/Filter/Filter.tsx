@@ -1,28 +1,25 @@
+import { useState } from "react";
+import type { Status } from "../../types/types";
+
 interface Props {
-  onSubmit: (status?: string) => void;
+  onFilterChange: (status: Status) => void;
+  currentStatus: Status;
 }
 
-export default function Filter({ onSubmit }: Props) {
-  const handleSubmit = async (formData: FormData) => {
-    const status = formData.get("status") as string;
+export default function Filter({ onFilterChange, currentStatus }: Props) {
+  const [status, setStatus] = useState<Status>(currentStatus);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as Status;
+    setStatus(value);
 
-    if (status) {
-      if (status === "all") {
-        onSubmit();
-      } else {
-        onSubmit(status);
-      }
-    }
+    onFilterChange(value);
   };
 
   return (
-    <form action={handleSubmit}>
-      <select name="status">
-        <option value="all">All</option>
-        <option value="true">Online</option>
-        <option value="false">Offline</option>
-      </select>
-      <button>Search</button>
-    </form>
+    <select name="status" value={status} onChange={handleChange}>
+      <option value="all">All</option>
+      <option value="true">Online</option>
+      <option value="false">Offline</option>
+    </select>
   );
 }

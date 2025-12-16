@@ -1,6 +1,6 @@
 import UserList from "../UserList/UserList.tsx";
 import { getUsers } from "../../api/api.ts";
-import type { Order, User } from "../../types/types.ts";
+import type { Order, Status, User } from "../../types/types.ts";
 import Filter from "../Filter/Filter.tsx";
 import Section from "../Section/Section.tsx";
 import Loader from "../Loader/Loader.tsx";
@@ -15,11 +15,20 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [sortOrder, setSortOrder] = useState<Order>("asc");
+  const [onlineStatus, setOnlineStatus] = useState<Status>("all");
   // const [isListVisible, setIsListVisible] = useState(false);
 
   useEffect(() => {
-    getUsers({ order: sortOrder }).then(setUsers);
-  }, [sortOrder]);
+    setIsError(false);
+    setIsLoading(true);
+    getUsers({
+      order: sortOrder,
+      isOnline: onlineStatus === "all" ? undefined : onlineStatus,
+    })
+      .then(setUsers)
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
+  }, [sortOrder, onlineStatus]);
 
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
@@ -33,19 +42,9 @@ function App() {
     setIsFormVisible(false);
   };
 
-  // const onSubmit = async (status?: string) => {
-  //   try {
-  //     setIsError(false);
-  //     setIsLoading(true);
-
-  //     const users = await getUsers({ isOnline: status });
-  //     setUsers(users);
-  //   } catch {
-  //     setIsError(true);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const onFilterChange = async (status: Status) => {
+    setOnlineStatus(status);
+  };
 
   // const handleDeleteUser = (id: string) => {
   //   setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
@@ -60,7 +59,7 @@ function App() {
       </button> */}
       {/* {isListVisible && ( */}
       <Section title="List of users">
-        {/* <Filter onSubmit={onSubmit} /> */}
+        <Filter onFilterChange={onFilterChange} currentStatus={onlineStatus} />
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         <SortBlock onChangeOrder={changeSortOrder} currentOrder={sortOrder} />

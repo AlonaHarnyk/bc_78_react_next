@@ -6,3 +6,5 @@ export interface User {
 }
 
 export type Order = "asc" | "desc";
+
+export type Status = "all" | "false" | "true";
