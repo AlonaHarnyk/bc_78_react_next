@@ -4,3 +4,5 @@ export interface User {
   isOnline: boolean;
   id: string;
 }
+
+export type Order = "asc" | "desc";
