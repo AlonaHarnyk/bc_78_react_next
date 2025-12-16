@@ -1,6 +1,9 @@
 import { useId } from "react";
+interface Props {
+  hideForm: () => void;
+}
 
-export default function AddUserForm() {
+export default function AddUserForm({ hideForm }: Props) {
   const id = useId();
 
   const handleSubmit = (formData: FormData) => {
@@ -14,6 +17,7 @@ export default function AddUserForm() {
       isOnline: Boolean(isOnline),
     };
     console.log(userData);
+    hideForm();
   };
 
   return (

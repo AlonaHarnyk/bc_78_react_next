@@ -5,14 +5,27 @@ import Filter from "../Filter/Filter.tsx";
 import Section from "../Section/Section.tsx";
 import Loader from "../Loader/Loader.tsx";
 import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddUserForm from "../AddUserForm/AddUserForm.tsx";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   // const [isListVisible, setIsListVisible] = useState(false);
+
+  useEffect(() => {
+    getUsers({}).then(setUsers);
+  }, []);
+
+  const showForm = () => {
+    setIsFormVisible(true);
+  };
+
+  const hideForm = () => {
+    setIsFormVisible(false);
+  };
 
   const onSubmit = async (status?: string) => {
     try {
@@ -45,7 +58,9 @@ function App() {
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         <UserList users={users} />
-        <AddUserForm />
+        {!isFormVisible && <button onClick={showForm}>Add user</button>}
+
+        {isFormVisible && <AddUserForm hideForm={hideForm} />}
       </Section>
 
       {/* )} */}
