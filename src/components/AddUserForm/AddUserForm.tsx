@@ -1,12 +1,14 @@
-import { useId } from "react";
+import { useId, useState } from "react";
+import { addUser } from "../../api/api";
 interface Props {
   hideForm: () => void;
 }
 
 export default function AddUserForm({ hideForm }: Props) {
+  const [isAdding, setIsAdding] = useState(false);
   const id = useId();
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     const userName = formData.get("name") as string;
     const userAge = formData.get("age") as string;
     const isOnline = formData.get("isOnline") as string;
@@ -16,7 +18,14 @@ export default function AddUserForm({ hideForm }: Props) {
       age: Number(userAge),
       isOnline: Boolean(isOnline),
     };
-    console.log(userData);
+    try {
+      setIsAdding(true);
+      await addUser(userData);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsAdding(false);
+    }
     hideForm();
   };
 
@@ -40,7 +49,7 @@ export default function AddUserForm({ hideForm }: Props) {
             No
           </label>
         </fieldset>
-        <button>Submit</button>
+        <button>{isAdding ? "Submitting" : "Submit"}</button>
       </form>
     </div>
   );

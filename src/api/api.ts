@@ -9,6 +9,12 @@ interface GetUsersParams {
   sortBy: Field;
 }
 
+interface UserData {
+  name: string;
+  age: number;
+  isOnline: boolean;
+}
+
 export async function getUsers({
   isOnline,
   order,
@@ -35,5 +41,10 @@ export async function updateUserStatus(
 ): Promise<User> {
   const { data } = await axios.put<User>(`/users/${id}`, { isOnline: status });
 
+  return data;
+}
+
+export async function addUser(userData: UserData): Promise<User> {
+  const { data } = await axios.post<User>(`/users`, userData);
   return data;
 }

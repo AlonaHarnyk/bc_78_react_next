@@ -64,6 +64,16 @@ function App() {
   };
 
   const hideForm = () => {
+    setIsError(false);
+    setIsLoading(true);
+    getUsers({
+      order: sortOrder,
+      sortBy: sortField,
+      isOnline: onlineStatus === "all" ? undefined : onlineStatus,
+    })
+      .then(setUsers)
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
     setIsFormVisible(false);
   };
 
@@ -80,26 +90,28 @@ function App() {
       </button>
       {isListVisible && (
         <Section title="List of users">
+          {!isFormVisible && <button onClick={showForm}>Add user</button>}
+
+          {isFormVisible && <AddUserForm hideForm={hideForm} />}
           <Filter
             onFilterChange={onFilterChange}
             currentStatus={onlineStatus}
           />
           {isLoading && <Loader />}
           {isError && <ErrorMessage />}
+
           <SortBlock
             onChangeOrder={changeSortOrder}
             onChangeField={changeSortField}
             currentOrder={sortOrder}
             currentField={sortField}
           />
+
           <UserList
             users={users}
             onDelete={deleteUser}
             onUpdateUser={updateUser}
           />
-          {!isFormVisible && <button onClick={showForm}>Add user</button>}
-
-          {isFormVisible && <AddUserForm hideForm={hideForm} />}
         </Section>
       )}
     </>
