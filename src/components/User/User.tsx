@@ -1,17 +1,20 @@
 import type { User } from "../../types/types";
 import css from "./User.module.css";
 import clsx from "clsx";
-import { deleteUser } from "../../api/api";
+import { deleteUser, updateUserStatus } from "../../api/api";
 import { useState } from "react";
 
 interface UserDataProps {
   userData: User;
+  onDelete: (id: string) => void;
 }
 
 export default function User({
   userData: { name, age, isOnline, id },
+  onDelete,
 }: UserDataProps) {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const getStatusColor = () => {
     if (isOnline === true) {
@@ -27,10 +30,22 @@ export default function User({
     try {
       setIsDeleteLoading(true);
       await deleteUser(id);
+      onDelete(id);
     } catch (error) {
       console.log(error);
     } finally {
       setIsDeleteLoading(false);
+    }
+  };
+
+  const handleUpdateUserStatus = async () => {
+    try {
+      setIsUpdating(true);
+      await updateUserStatus(id, !isOnline);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -42,12 +57,12 @@ export default function User({
         Is user online:
         <span className={statusStyle}>{isOnline ? "Yes" : "No"}</span>
       </p>
-      {
-        <button onClick={handleDeleteUser}>
-          {" "}
-          {isDeleteLoading ? "Deleting" : "Delete"}
-        </button>
-      }
+      <button onClick={handleDeleteUser}>
+        {isDeleteLoading ? "Deleting" : "Delete"}
+      </button>
+      <button onClick={handleUpdateUserStatus}>
+        {isUpdating ? "Updating status" : "Update user status"}
+      </button>
     </>
   );
 }

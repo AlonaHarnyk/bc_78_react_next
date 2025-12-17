@@ -36,6 +36,10 @@ function App() {
     }
   }, [sortOrder, onlineStatus, isListVisible, sortField]);
 
+  const deleteUser = (id: string) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+  };
+
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
   };
@@ -77,7 +81,7 @@ function App() {
             currentOrder={sortOrder}
             currentField={sortField}
           />
-          <UserList users={users} />
+          <UserList users={users} onDelete={deleteUser} />
           {!isFormVisible && <button onClick={showForm}>Add user</button>}
 
           {isFormVisible && <AddUserForm hideForm={hideForm} />}

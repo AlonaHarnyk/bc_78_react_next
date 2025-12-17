@@ -28,3 +28,12 @@ export async function getUsers({
 export async function deleteUser(id: string): Promise<void> {
   await axios.delete<User>(`/users/${id}`);
 }
+
+export async function updateUserStatus(
+  id: string,
+  status: boolean
+): Promise<User> {
+  const { data } = await axios.put<User>(`/users/${id}`, { isOnline: status });
+
+  return data;
+}
