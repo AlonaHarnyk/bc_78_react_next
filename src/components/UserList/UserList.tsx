@@ -4,14 +4,19 @@ import UserItem from "../User/User";
 interface Props {
   users: User[];
   onDelete: (id: string) => void;
+  onUpdateUser: (id: string) => void;
 }
 
-export default function UserList({ users, onDelete }: Props) {
+export default function UserList({ users, onDelete, onUpdateUser }: Props) {
   return (
     <ul>
       {users.map((user) => (
         <li key={user.id}>
-          <UserItem userData={user} onDelete={onDelete} />
+          <UserItem
+            userData={user}
+            onDelete={onDelete}
+            onUpdateUser={onUpdateUser}
+          />
         </li>
       ))}
     </ul>

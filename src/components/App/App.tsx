@@ -40,6 +40,17 @@ function App() {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
   };
 
+  const updateUser = (id: string) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) => {
+        if (user.id === id) {
+          return { ...user, isOnline: !user.isOnline };
+        }
+        return user;
+      })
+    );
+  };
+
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
   };
@@ -81,7 +92,11 @@ function App() {
             currentOrder={sortOrder}
             currentField={sortField}
           />
-          <UserList users={users} onDelete={deleteUser} />
+          <UserList
+            users={users}
+            onDelete={deleteUser}
+            onUpdateUser={updateUser}
+          />
           {!isFormVisible && <button onClick={showForm}>Add user</button>}
 
           {isFormVisible && <AddUserForm hideForm={hideForm} />}
