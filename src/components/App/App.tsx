@@ -56,10 +56,6 @@ function App() {
     setOnlineStatus(status);
   };
 
-  // const handleDeleteUser = (id: string) => {
-  //   setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-  // };
-
   const toggleUsers = () => setIsListVisible((visible) => !visible);
 
   return (

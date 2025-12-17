@@ -24,3 +24,7 @@ export async function getUsers({
 
   return data;
 }
+
+export async function deleteUser(id: string): Promise<void> {
+  await axios.delete<User>(`/users/${id}`);
+}
