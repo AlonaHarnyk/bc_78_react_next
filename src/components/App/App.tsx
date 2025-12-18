@@ -8,48 +8,40 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
 import { useEffect, useState } from "react";
 import AddUserForm from "../AddUserForm/AddUserForm.tsx";
 import SortBlock from "../SortBlock/SortBlock.tsx";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [sortOrder, setSortOrder] = useState<Order>("asc");
   const [onlineStatus, setOnlineStatus] = useState<Status>("all");
   const [isListVisible, setIsListVisible] = useState(false);
   const [sortField, setSortField] = useState<Field>("name");
 
-  useEffect(() => {
-    if (isListVisible) {
-      setIsError(false);
-      setIsLoading(true);
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["users", sortOrder, sortField, onlineStatus],
+    queryFn: () =>
       getUsers({
         order: sortOrder,
         sortBy: sortField,
         isOnline: onlineStatus === "all" ? undefined : onlineStatus,
-      })
-        .then(setUsers)
-        .catch(() => setIsError(true))
-        .finally(() => setIsLoading(false));
-    } else {
-      setUsers([]);
-    }
-  }, [sortOrder, onlineStatus, isListVisible, sortField]);
+      }),
+    enabled: isListVisible,
+  });
 
-  const deleteUser = (id: string) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-  };
+  // const deleteUser = (id: string) => {
+  //   setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+  // };
 
-  const updateUser = (id: string) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) => {
-        if (user.id === id) {
-          return { ...user, isOnline: !user.isOnline };
-        }
-        return user;
-      })
-    );
-  };
+  // const updateUser = (id: string) => {
+  //   setUsers((prevUsers) =>
+  //     prevUsers.map((user) => {
+  //       if (user.id === id) {
+  //         return { ...user, isOnline: !user.isOnline };
+  //       }
+  //       return user;
+  //     })
+  //   );
+  // };
 
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
@@ -92,11 +84,13 @@ function App() {
             currentOrder={sortOrder}
             currentField={sortField}
           />
-          <UserList
-            users={users}
-            onDelete={deleteUser}
-            onUpdateUser={updateUser}
-          />
+          {data && data.length > 0 && (
+            <UserList
+              users={data}
+              // onDelete={deleteUser}
+              // onUpdateUser={updateUser}
+            />
+          )}
           {!isFormVisible && <button onClick={showForm}>Add user</button>}
 
           {isFormVisible && <AddUserForm hideForm={hideForm} />}

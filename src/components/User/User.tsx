@@ -6,15 +6,15 @@ import { useState } from "react";
 
 interface UserDataProps {
   userData: User;
-  onDelete: (id: string) => void;
-  onUpdateUser: (id: string) => void;
+  // onDelete: (id: string) => void;
+  // onUpdateUser: (id: string) => void;
 }
 
 export default function User({
   userData: { name, age, isOnline, id },
-  onDelete,
-  onUpdateUser,
-}: UserDataProps) {
+}: // onDelete,
+// onUpdateUser,
+UserDataProps) {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -29,27 +29,27 @@ export default function User({
   const statusStyle = clsx(css.status, getStatusColor());
 
   const handleDeleteUser = async () => {
-    try {
-      setIsDeleteLoading(true);
-      await deleteUser(id);
-      onDelete(id);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsDeleteLoading(false);
-    }
+    // try {
+    //   setIsDeleteLoading(true);
+    //   await deleteUser(id);
+    //   onDelete(id);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setIsDeleteLoading(false);
+    // }
   };
 
   const handleUpdateUserStatus = async () => {
-    try {
-      setIsUpdating(true);
-      await updateUserStatus(id, !isOnline);
-      onUpdateUser(id);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsUpdating(false);
-    }
+    // try {
+    //   setIsUpdating(true);
+    //   await updateUserStatus(id, !isOnline);
+    //   onUpdateUser(id);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setIsUpdating(false);
+    // }
   };
 
   return (
