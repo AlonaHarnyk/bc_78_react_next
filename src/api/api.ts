@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Field, Order, User } from "../types/types";
+import type { Contact, Field, Order, User } from "../types/types";
 
 axios.defaults.baseURL = "https://6240d2109b450ae274385b44.mockapi.io/api";
 
@@ -8,6 +8,7 @@ interface GetUsersParams {
   order: Order;
   sortBy: Field;
   search: string;
+  page: number;
 }
 
 export async function getUsers({
@@ -15,6 +16,7 @@ export async function getUsers({
   order,
   sortBy,
   search,
+  page,
 }: GetUsersParams): Promise<User[]> {
   const { data } = await axios.get<User[]>("/users", {
     params: {
@@ -22,6 +24,8 @@ export async function getUsers({
       order,
       sortBy,
       search,
+      page,
+      limit: 5,
     },
   });
 
@@ -38,5 +42,10 @@ export async function updateUserStatus(
 ): Promise<User> {
   const { data } = await axios.put<User>(`/users/${id}`, { isOnline: status });
 
+  return data;
+}
+
+export async function getContact(): Promise<Contact[]> {
+  const { data } = await axios.get<Contact[]>("/contacts");
   return data;
 }
