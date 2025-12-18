@@ -7,18 +7,21 @@ interface GetUsersParams {
   isOnline?: string;
   order: Order;
   sortBy: Field;
+  search: string;
 }
 
 export async function getUsers({
   isOnline,
   order,
   sortBy,
+  search,
 }: GetUsersParams): Promise<User[]> {
   const { data } = await axios.get<User[]>("/users", {
     params: {
       isOnline,
       order,
       sortBy,
+      search,
     },
   });
 

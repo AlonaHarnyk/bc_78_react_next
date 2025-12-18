@@ -1,14 +1,15 @@
 import UserList from "../UserList/UserList.tsx";
 import { getUsers } from "../../api/api.ts";
-import type { Field, Order, Status, User } from "../../types/types.ts";
+import type { Field, Order, Status } from "../../types/types.ts";
 import Filter from "../Filter/Filter.tsx";
 import Section from "../Section/Section.tsx";
 import Loader from "../Loader/Loader.tsx";
 import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddUserForm from "../AddUserForm/AddUserForm.tsx";
 import SortBlock from "../SortBlock/SortBlock.tsx";
 import { useQuery } from "@tanstack/react-query";
+import SearchForm from "./../SearchForm/SearchForm";
 
 function App() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -16,14 +17,16 @@ function App() {
   const [onlineStatus, setOnlineStatus] = useState<Status>("all");
   const [isListVisible, setIsListVisible] = useState(false);
   const [sortField, setSortField] = useState<Field>("name");
+  const [searchWord, setSearchWord] = useState("");
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["users", sortOrder, sortField, onlineStatus],
+    queryKey: ["users", sortOrder, sortField, onlineStatus, searchWord],
     queryFn: () =>
       getUsers({
         order: sortOrder,
         sortBy: sortField,
         isOnline: onlineStatus === "all" ? undefined : onlineStatus,
+        search: searchWord,
       }),
     enabled: isListVisible,
   });
@@ -42,6 +45,10 @@ function App() {
   //     })
   //   );
   // };
+
+  const handleSearch = (searchWord: string) => {
+    setSearchWord(searchWord);
+  };
 
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
@@ -72,24 +79,28 @@ function App() {
       </button>
       {isListVisible && (
         <Section title="List of users">
-          <Filter
-            onFilterChange={onFilterChange}
-            currentStatus={onlineStatus}
-          />
           {isLoading && <Loader />}
           {isError && <ErrorMessage />}
-          <SortBlock
-            onChangeOrder={changeSortOrder}
-            onChangeField={changeSortField}
-            currentOrder={sortOrder}
-            currentField={sortField}
-          />
           {data && data.length > 0 && (
-            <UserList
-              users={data}
-              // onDelete={deleteUser}
-              // onUpdateUser={updateUser}
-            />
+            <>
+              <SearchForm onSubmit={handleSearch} />
+              <Filter
+                onFilterChange={onFilterChange}
+                currentStatus={onlineStatus}
+              />
+
+              <SortBlock
+                onChangeOrder={changeSortOrder}
+                onChangeField={changeSortField}
+                currentOrder={sortOrder}
+                currentField={sortField}
+              />
+              <UserList
+                users={data}
+                // onDelete={deleteUser}
+                // onUpdateUser={updateUser}
+              />
+            </>
           )}
           {!isFormVisible && <button onClick={showForm}>Add user</button>}
 
