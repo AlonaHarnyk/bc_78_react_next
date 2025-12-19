@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import SearchForm from "./../SearchForm/SearchForm";
 
 export default function UsersTab() {
-     const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const [sortOrder, setSortOrder] = useState<Order>("asc");
   const [onlineStatus, setOnlineStatus] = useState<Status>("all");
   const [isListVisible, setIsListVisible] = useState(false);
@@ -98,7 +98,12 @@ export default function UsersTab() {
           {isError && <ErrorMessage />}
           {data && data.length > 0 && (
             <>
+              {!isFormVisible && <button onClick={showForm}>Add user</button>}
+
+              {isFormVisible && <AddUserForm hideForm={hideForm} />}
+
               <SearchForm onSubmit={handleSearch} />
+
               <Filter
                 onFilterChange={onFilterChange}
                 currentStatus={onlineStatus}
@@ -120,9 +125,6 @@ export default function UsersTab() {
               )}
             </>
           )}
-          {!isFormVisible && <button onClick={showForm}>Add user</button>}
-
-          {isFormVisible && <AddUserForm hideForm={hideForm} />}
         </Section>
       )}
     </>

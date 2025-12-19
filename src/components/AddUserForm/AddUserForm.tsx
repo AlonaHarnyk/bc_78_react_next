@@ -1,47 +1,88 @@
 import { useId } from "react";
+import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import css from "./AddUserForm.module.css";
+
 interface Props {
   hideForm: () => void;
 }
 
+interface FormValues {
+  name: string;
+  age: number | "";
+  isOnline: "true" | "false";
+}
+
+const initialFormValues: FormValues = {
+  name: "",
+  age: "",
+  isOnline: "true",
+};
+
+
+
+const formShema = Yup.object().shape({
+  name: Yup.string().min(2).required(),
+  age: Yup.number().positive().integer().required(),
+  isOnline: Yup.string().oneOf(["true", "false"]).required(),
+});
+
 export default function AddUserForm({ hideForm }: Props) {
   const id = useId();
 
-  const handleSubmit = (formData: FormData) => {
-    const userName = formData.get("name") as string;
-    const userAge = formData.get("age") as string;
-    const isOnline = formData.get("isOnline") as string;
+  const handleSubmit = (
+    values: FormValues,
+    formHelpers: FormikHelpers<FormValues>
+  ) => {
+    console.log(values);
+    formHelpers.resetForm();
 
-    const userData = {
-      name: userName,
-      age: Number(userAge),
-      isOnline: Boolean(isOnline),
-    };
-    console.log(userData);
-    hideForm();
+    // const userName = formData.get("name") as string;
+    // const userAge = formData.get("age") as string;
+    // const isOnline = formData.get("isOnline") as string;
+    // const userData = {
+    //   name: userName,
+    //   age: Number(userAge),
+    //   isOnline: Boolean(isOnline),
+    // };
+    // console.log(userData);
+    // hideForm();
   };
 
   return (
-    <div>
-      <form action={handleSubmit}>
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={handleSubmit}
+      validationSchema={formShema}
+    >
+      <Form>
         <label htmlFor={`name-${id}`}>Name:</label>
-        <input type="text" name="name" id={`name-${id}`} required />
+        <Field type="text" name="name" id={`name-${id}`} />
+        <ErrorMessage name="name" component="span" className={css.error} />
 
         <label htmlFor={`age-${id}`}>Age:</label>
-        <input type="number" name="age" id={`age-${id}`} required />
+        <Field type="number" name="age" id={`age-${id}`} />
+        <ErrorMessage name="age" component="span" className={css.error} />
 
         <fieldset>
           <legend>Is user online:</legend>
           <label>
-            <input type="radio" name="isOnline" value="true" required />
+            <Field type="radio" name="isOnline" value="true" />
             Yes
           </label>
           <label>
-            <input type="radio" name="isOnline" value="false" />
+            <Field type="radio" name="isOnline" value="false" />
             No
           </label>
+          <ErrorMessage
+            name="isOnline"
+            component="span"
+            className={css.error}
+          />
         </fieldset>
+
         <button>Submit</button>
-      </form>
-    </div>
+      </Form>
+    </Formik>
   );
 }
