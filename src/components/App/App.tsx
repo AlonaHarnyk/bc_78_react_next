@@ -72,6 +72,9 @@ function App() {
       </button>
       {isListVisible && (
         <Section title="List of users">
+          {!isFormVisible && <button onClick={showForm}>Add user</button>}
+
+          {isFormVisible && <AddUserForm hideForm={hideForm} />}
           <Filter
             onFilterChange={onFilterChange}
             currentStatus={onlineStatus}
@@ -91,9 +94,6 @@ function App() {
               // onUpdateUser={updateUser}
             />
           )}
-          {!isFormVisible && <button onClick={showForm}>Add user</button>}
-
-          {isFormVisible && <AddUserForm hideForm={hideForm} />}
         </Section>
       )}
     </>
