@@ -1,6 +1,7 @@
 import { useId } from "react";
-import { Field, Form, Formik, type FormikHelpers } from "formik";
+import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import css from "./AddUserForm.module.css";
 
 interface Props {
   hideForm: () => void;
@@ -54,9 +55,11 @@ export default function AddUserForm({ hideForm }: Props) {
       <Form>
         <label htmlFor={`name-${id}`}>Name:</label>
         <Field type="text" name="name" id={`name-${id}`} />
+        <ErrorMessage name="name" component="span" className={css.error} />
 
         <label htmlFor={`age-${id}`}>Age:</label>
         <Field type="number" name="age" id={`age-${id}`} />
+        <ErrorMessage name="age" component="span" className={css.error} />
 
         <fieldset>
           <legend>Is user online:</legend>
@@ -68,6 +71,11 @@ export default function AddUserForm({ hideForm }: Props) {
             <Field type="radio" name="isOnline" value="false" />
             No
           </label>
+          <ErrorMessage
+            name="isOnline"
+            component="span"
+            className={css.error}
+          />
         </fieldset>
 
         <button>Submit</button>
