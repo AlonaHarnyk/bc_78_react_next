@@ -13,7 +13,7 @@ const initialValues: ValuesInterface = {
   search: "",
 };
 
-const ValidationSchema = Yup.object({
+const validationSchema = Yup.object({
   search: Yup.string().required(),
 });
 
@@ -31,7 +31,7 @@ export default function SearchForm({ onSubmit }: Props) {
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
+      validationSchema={validationSchema}
     >
       <Form>
         <Field type="text" name="search" />

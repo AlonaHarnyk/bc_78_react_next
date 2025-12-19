@@ -3,6 +3,7 @@ import { getContact } from "../../api/api";
 import ContactsList from "../ContactsList/ContactList";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import AddContactForm from "../AddContactForm/AddContactForm";
 
 export default function ContactsTab() {
   const { data, isLoading, isError } = useQuery({
@@ -13,6 +14,7 @@ export default function ContactsTab() {
     <>
       {!isLoading && (
         <>
+          <AddContactForm />
           {data && data.length !== 0 ? (
             <ContactsList contacts={data} />
           ) : (

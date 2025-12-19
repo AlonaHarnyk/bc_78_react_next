@@ -19,8 +19,6 @@ const initialFormValues: FormValues = {
   isOnline: "true",
 };
 
-
-
 const formShema = Yup.object().shape({
   name: Yup.string().min(2).required(),
   age: Yup.number().positive().integer().required(),
@@ -36,17 +34,7 @@ export default function AddUserForm({ hideForm }: Props) {
   ) => {
     console.log(values);
     formHelpers.resetForm();
-
-    // const userName = formData.get("name") as string;
-    // const userAge = formData.get("age") as string;
-    // const isOnline = formData.get("isOnline") as string;
-    // const userData = {
-    //   name: userName,
-    //   age: Number(userAge),
-    //   isOnline: Boolean(isOnline),
-    // };
-    // console.log(userData);
-    // hideForm();
+    hideForm();
   };
 
   return (
