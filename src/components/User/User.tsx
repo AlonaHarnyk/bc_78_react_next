@@ -1,26 +1,39 @@
 import type { User } from "../../types/types";
 import css from "./User.module.css";
 import clsx from "clsx";
-import { deleteUser, updateUserStatus } from "../../api/api";
+import {
+  deleteUser,
+  updateUserStatus,
+  type UpdateUserStatusParams,
+} from "../../api/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UserDataProps {
   userData: User;
-  // onUpdateUser: (id: string) => void;
 }
 
 export default function User({
   userData: { name, age, isOnline, id },
-}: // onUpdateUser,
-UserDataProps) {
+}: UserDataProps) {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
     mutationFn: (id: string) => deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: () => {
-      console.log("Error!!!");
+      console.log("Error delete user");
+    },
+  });
+
+  const { mutate: updateMutate, isPending: isUpdatePending } = useMutation({
+    mutationFn: ({ id, status }: UpdateUserStatusParams) =>
+      updateUserStatus({ id, status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      console.log("Error update status user");
     },
   });
   const getStatusColor = () => {
@@ -34,19 +47,11 @@ UserDataProps) {
   const statusStyle = clsx(css.status, getStatusColor());
 
   const handleDeleteUser = async () => {
-    mutate(id);
+    deleteMutate(id);
   };
 
   const handleUpdateUserStatus = async () => {
-    // try {
-    //   setIsUpdating(true);
-    //   await updateUserStatus(id, !isOnline);
-    //   onUpdateUser(id);
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setIsUpdating(false);
-    // }
+    updateMutate({ id, status: !isOnline });
   };
 
   return (
@@ -58,12 +63,11 @@ UserDataProps) {
         <span className={statusStyle}>{isOnline ? "Yes" : "No"}</span>
       </p>
       <button onClick={handleDeleteUser}>
-        Delete
-        {/* {isDeleteLoading ? "Deleting" : "Delete"} */}
+        {isDeletePending ? "Deleting" : "Delete"}
       </button>
-      {/* <button onClick={handleUpdateUserStatus}>
-        {isUpdating ? "Updating status" : "Update user status"}
-      </button> */}
+      <button onClick={handleUpdateUserStatus}>
+        {isUpdatePending ? "Updating status" : "Update user status"}
+      </button>
     </>
   );
 }
