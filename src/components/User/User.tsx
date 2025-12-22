@@ -2,22 +2,27 @@ import type { User } from "../../types/types";
 import css from "./User.module.css";
 import clsx from "clsx";
 import { deleteUser, updateUserStatus } from "../../api/api";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UserDataProps {
   userData: User;
-  // onDelete: (id: string) => void;
   // onUpdateUser: (id: string) => void;
 }
 
 export default function User({
   userData: { name, age, isOnline, id },
-}: // onDelete,
-// onUpdateUser,
+}: // onUpdateUser,
 UserDataProps) {
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (id: string) => deleteUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      console.log("Error!!!");
+    },
+  });
   const getStatusColor = () => {
     if (isOnline === true) {
       return css.online;
@@ -29,15 +34,7 @@ UserDataProps) {
   const statusStyle = clsx(css.status, getStatusColor());
 
   const handleDeleteUser = async () => {
-    // try {
-    //   setIsDeleteLoading(true);
-    //   await deleteUser(id);
-    //   onDelete(id);
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setIsDeleteLoading(false);
-    // }
+    mutate(id);
   };
 
   const handleUpdateUserStatus = async () => {
@@ -61,11 +58,12 @@ UserDataProps) {
         <span className={statusStyle}>{isOnline ? "Yes" : "No"}</span>
       </p>
       <button onClick={handleDeleteUser}>
-        {isDeleteLoading ? "Deleting" : "Delete"}
+        Delete
+        {/* {isDeleteLoading ? "Deleting" : "Delete"} */}
       </button>
-      <button onClick={handleUpdateUserStatus}>
+      {/* <button onClick={handleUpdateUserStatus}>
         {isUpdating ? "Updating status" : "Update user status"}
-      </button>
+      </button> */}
     </>
   );
 }
