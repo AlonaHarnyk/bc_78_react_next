@@ -2,6 +2,8 @@ import { useId } from "react";
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./AddUserForm.module.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addUser, type UserData } from "../../api/api";
 
 interface Props {
   hideForm: () => void;
@@ -27,12 +29,26 @@ const formShema = Yup.object().shape({
 
 export default function AddUserForm({ hideForm }: Props) {
   const id = useId();
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (data: UserData) => addUser(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      console.log("Error add user");
+    },
+  });
 
   const handleSubmit = (
     values: FormValues,
     formHelpers: FormikHelpers<FormValues>
   ) => {
-    console.log(values);
+    mutate({
+      ...values,
+      age: Number(values.age),
+      isOnline: values.isOnline === "true" ? true : false,
+    });
     formHelpers.resetForm();
     hideForm();
   };

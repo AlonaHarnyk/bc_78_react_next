@@ -69,3 +69,14 @@ export async function addContact(contact: ContactData): Promise<Contact> {
 export async function deleteContact(id: string): Promise<void> {
   await axios.delete(`/contacts/${id}`);
 }
+
+export interface UserData {
+  name: string;
+  age: number;
+  isOnline: boolean;
+}
+
+export async function addUser(user: UserData): Promise<User> {
+  const { data } = await axios.post<User>("/users", user);
+  return data;
+}
