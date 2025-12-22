@@ -7,7 +7,7 @@ import AddContactForm from "../AddContactForm/AddContactForm";
 
 export default function ContactsTab() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["contact"],
+    queryKey: ["contacts"],
     queryFn: () => getContact(),
   });
   return (

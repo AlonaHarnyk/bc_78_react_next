@@ -49,3 +49,7 @@ export async function getContact(): Promise<Contact[]> {
   const { data } = await axios.get<Contact[]>("/contacts");
   return data;
 }
+
+export async function deleteContact(id: string): Promise<void> {
+  await axios.delete(`/contacts/${id}`);
+}
