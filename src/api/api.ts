@@ -11,6 +11,11 @@ interface GetUsersParams {
   page: number;
 }
 
+export interface ContactData {
+  name: string;
+  number: string;
+}
+
 export async function getUsers({
   isOnline,
   order,
@@ -47,6 +52,12 @@ export async function updateUserStatus(
 
 export async function getContact(): Promise<Contact[]> {
   const { data } = await axios.get<Contact[]>("/contacts");
+  return data;
+}
+
+export async function addContact(contact: ContactData): Promise<Contact> {
+  const { data } = await axios.post<Contact>("/contacts", contact);
+
   return data;
 }
 

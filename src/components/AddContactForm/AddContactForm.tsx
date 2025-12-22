@@ -1,6 +1,8 @@
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./AddContactForm.module.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addContact, type ContactData } from "../../api/api";
 interface FormValues {
   name: string;
   number: string;
@@ -21,11 +23,23 @@ const formSchema = Yup.object().shape({
 });
 
 export default function AddContactForm() {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: (data: ContactData) => addContact(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
+
   const handleSubmit = (
     values: FormValues,
     formikHelpers: FormikHelpers<FormValues>
   ) => {
-    console.log(values);
+    mutate(values);
     formikHelpers.resetForm();
   };
   return (
@@ -46,7 +60,7 @@ export default function AddContactForm() {
           <ErrorMessage name="number" component="span" className={css.error} />
         </label>
 
-        <button>Submit Contact</button>
+        <button type="submit">Submit Contact</button>
       </Form>
     </Formik>
   );
