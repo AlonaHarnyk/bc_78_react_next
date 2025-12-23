@@ -10,6 +10,7 @@ import AddUserForm from "../AddUserForm/AddUserForm.tsx";
 import SortBlock from "../SortBlock/SortBlock.tsx";
 import { useQuery } from "@tanstack/react-query";
 import SearchForm from "./../SearchForm/SearchForm";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function UsersTab() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -17,8 +18,8 @@ export default function UsersTab() {
   const [onlineStatus, setOnlineStatus] = useState<Status>("all");
   const [isListVisible, setIsListVisible] = useState(false);
   const [sortField, setSortField] = useState<Field>("name");
-  const [searchWord, setSearchWord] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isError, isLoading } = useQuery({
     queryKey: [
@@ -26,7 +27,7 @@ export default function UsersTab() {
       sortOrder,
       sortField,
       onlineStatus,
-      searchWord,
+      searchQuery,
       currentPage,
     ],
     queryFn: () =>
@@ -34,32 +35,16 @@ export default function UsersTab() {
         order: sortOrder,
         sortBy: sortField,
         isOnline: onlineStatus === "all" ? undefined : onlineStatus,
-        search: searchWord,
+        search: searchQuery,
         page: currentPage,
       }),
     enabled: isListVisible,
   });
 
-  // const deleteUser = (id: string) => {
-  //   setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-  // };
-
-  // const updateUser = (id: string) => {
-  //   setUsers((prevUsers) =>
-  //     prevUsers.map((user) => {
-  //       if (user.id === id) {
-  //         return { ...user, isOnline: !user.isOnline };
-  //       }
-  //       return user;
-  //     })
-  //   );
-  // };
-
-  const handleSearch = (searchWord: string) => {
-    setSearchWord(searchWord);
+  const handleSearch = useDebouncedCallback((searchQuery: string) => {
+    setSearchQuery(searchQuery);
     setCurrentPage(1);
-  };
-
+  }, 2000);
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
   };
@@ -102,7 +87,7 @@ export default function UsersTab() {
 
               {isFormVisible && <AddUserForm hideForm={hideForm} />}
 
-              <SearchForm onSubmit={handleSearch} />
+              <SearchForm searchQuery={searchQuery} onSearch={handleSearch} />
 
               <Filter
                 onFilterChange={onFilterChange}
@@ -115,11 +100,7 @@ export default function UsersTab() {
                 currentOrder={sortOrder}
                 currentField={sortField}
               />
-              <UserList
-                users={data}
-                // onDelete={deleteUser}
-                // onUpdateUser={updateUser}
-              />
+              <UserList users={data} />
               {data.length === 5 && (
                 <button onClick={handleLoadMoreBtn}>Load More</button>
               )}

@@ -1,43 +1,19 @@
-import { Formik, Form, Field, type FormikHelpers, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import type { DebouncedState } from "use-debounce";
 
 interface Props {
-  onSubmit: (searchWord: string) => void;
+  searchQuery: string;
+  onSearch: DebouncedState<(query: string) => void>;
 }
 
-interface ValuesInterface {
-  search: string;
-}
-
-const initialValues: ValuesInterface = {
-  search: "",
-};
-
-const validationSchema = Yup.object({
-  search: Yup.string().required(),
-});
-
-export default function SearchForm({ onSubmit }: Props) {
-  const handleSubmit = (
-    values: ValuesInterface,
-    FormikHelpers: FormikHelpers<ValuesInterface>
-  ) => {
-    onSubmit(values.search);
-
-    FormikHelpers.resetForm();
+export default function SearchForm({ searchQuery, onSearch }: Props) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(e.target.value);
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={validationSchema}
-    >
-      <Form>
-        <Field type="text" name="search" />
-        <ErrorMessage name="search" component="span" />
-        <button>Search</button>
-      </Form>
-    </Formik>
+    <label>
+      Search query:
+      <input type="text" defaultValue={searchQuery} onChange={handleChange} />
+    </label>
   );
 }
