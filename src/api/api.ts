@@ -55,8 +55,10 @@ export async function updateUserStatus({
   return data;
 }
 
-export async function getContact(): Promise<Contact[]> {
-  const { data } = await axios.get<Contact[]>("/contacts");
+export async function getContacts(search: string): Promise<Contact[]> {
+  const { data } = await axios.get<Contact[]>("/contacts", {
+    params: { search },
+  });
   return data;
 }
 

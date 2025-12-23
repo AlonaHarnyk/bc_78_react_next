@@ -44,7 +44,7 @@ export default function UsersTab() {
   const handleSearch = useDebouncedCallback((searchQuery: string) => {
     setSearchQuery(searchQuery);
     setCurrentPage(1);
-  }, 2000);
+  }, 500);
   const changeSortOrder = (order: Order) => {
     setSortOrder(order);
   };
