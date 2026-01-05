@@ -1,0 +1,18 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navList {
+  font-size: 48px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+
+  list-style: none;
+}
+
+.navItem {
+}
