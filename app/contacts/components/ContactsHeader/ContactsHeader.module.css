@@ -1,0 +1,9 @@
+.navList {
+  display: flex;
+  font-size: 24px;
+  justify-content: space-between;
+  width: 700px;
+  margin: 0 auto;
+}
+.navItem {
+}
