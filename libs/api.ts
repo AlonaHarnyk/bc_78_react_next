@@ -7,3 +7,8 @@ export async function getContacts(): Promise<Contact[]> {
   const res = await axios.get<Contact[]>("/contacts");
   return res.data;
 }
+
+export async function getContactById(id: string): Promise<Contact> {
+  const res = await axios.get<Contact>(`/contacts/${id}`);
+  return res.data;
+}

@@ -11,7 +11,6 @@ export default function ContactsList({ contacts }: Props) {
       {contacts.map((contact) => (
         <li key={contact.id}>
           <p>{contact.name}</p>
-          <p>{contact.number}</p>
           <Link href={`/contacts/${contact.id}`}>View Details</Link>
         </li>
       ))}
