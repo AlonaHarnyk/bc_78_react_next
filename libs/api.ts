@@ -18,3 +18,8 @@ export async function getUsers(): Promise<User[]> {
 
   return data;
 }
+
+export async function getUserById(id: string): Promise<User> {
+  const res = await axios.get<User>(`/users/${id}`);
+  return res.data;
+}
