@@ -4,6 +4,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import ContactDetails from "./ContactDetails/ContactDetails";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -18,5 +19,9 @@ export default async function Contact({ params }: Props) {
     queryFn: () => getContactById(id),
   });
 
-  return <HydrationBoundary state={dehydrate(queryClient)}></HydrationBoundary>;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ContactDetails />
+    </HydrationBoundary>
+  );
 }
