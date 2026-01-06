@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Contact } from "./types";
+import { Contact, User } from "./types";
 
 axios.defaults.baseURL = "https://6240d2109b450ae274385b44.mockapi.io/api";
 
@@ -11,4 +11,10 @@ export async function getContacts(): Promise<Contact[]> {
 export async function getContactById(id: string): Promise<Contact> {
   const res = await axios.get<Contact>(`/contacts/${id}`);
   return res.data;
+}
+
+export async function getUsers(): Promise<User[]> {
+  const { data } = await axios.get<User[]>("/users");
+
+  return data;
 }
