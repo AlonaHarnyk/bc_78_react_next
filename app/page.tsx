@@ -6,7 +6,7 @@ export default function Home() {
     <div className={css.container}>
       <ul className={css.navList}>
         <li className={css.navItem}>
-          <Link href="/contacts">Contacts</Link>
+          <Link href="/contacts/search/all">Contacts</Link>
         </li>
         <li className={css.navItem}>
           <Link href="/users">Users</Link>

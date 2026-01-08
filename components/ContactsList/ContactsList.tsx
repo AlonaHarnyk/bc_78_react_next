@@ -6,6 +6,7 @@ interface Props {
 }
 
 export default function ContactsList({ contacts }: Props) {
+  console.log(contacts);
   return (
     <ul>
       {contacts.map((contact) => (

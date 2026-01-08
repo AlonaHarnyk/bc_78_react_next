@@ -2,14 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-export default function SearchBar() {
+interface Props {
+  category: string;
+}
+
+export default function SearchBar({ category }: Props) {
   const router = useRouter();
 
   const handleSubmit = (data: FormData) => {
     const searchText = data.get("search") as string;
 
     if (searchText.trim().length > 0) {
-      router.push(`/contacts/search/${searchText}`);
+      router.push(`/contacts/search/${category}/${searchText}`);
     }
   };
 

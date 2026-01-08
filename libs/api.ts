@@ -3,8 +3,20 @@ import { Contact, ContactData, User } from "./types";
 
 axios.defaults.baseURL = "https://6240d2109b450ae274385b44.mockapi.io/api";
 
-export async function getContacts(search?: string): Promise<Contact[]> {
-  const res = await axios.get<Contact[]>("/contacts", { params: { search } });
+interface GetContactsProps {
+  search?: string;
+  hasWork?: boolean;
+}
+
+export async function getContacts({
+  search,
+  hasWork,
+}: GetContactsProps): Promise<Contact[]> {
+  // console.log(search);
+  // console.log(hasWork);
+  const res = await axios.get<Contact[]>("/contacts", {
+    params: { search, hasWork },
+  });
   return res.data;
 }
 
