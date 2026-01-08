@@ -9,3 +9,8 @@ export interface User {
   isOnline: boolean;
   id: string;
 }
+
+export interface ContactData {
+  name: string;
+  number: string;
+}
