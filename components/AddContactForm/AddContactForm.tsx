@@ -2,13 +2,9 @@
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./AddContactForm.module.css";
+import { ContactData } from "@/libs/types";
 
-interface FormValues {
-  name: string;
-  number: string;
-}
-
-const initialValues: FormValues = {
+const initialValues: ContactData = {
   name: "",
   number: "",
 };
@@ -23,13 +19,13 @@ const formSchema = Yup.object().shape({
 });
 
 interface Props {
-  onSubmit: (data: FormValues) => void;
+  onSubmit: (data: ContactData) => void;
 }
 
 export default function AddContactForm({ onSubmit }: Props) {
   const handleSubmit = (
-    values: FormValues,
-    formikHelpers: FormikHelpers<FormValues>
+    values: ContactData,
+    formikHelpers: FormikHelpers<ContactData>
   ) => {
     onSubmit(values);
     formikHelpers.resetForm();
