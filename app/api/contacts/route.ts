@@ -15,3 +15,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ status: err.response?.data.status ?? 500 });
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const contactData = await request.json();
+    const { data } = await api.post("/contacts", contactData);
+    return NextResponse.json(data);
+  } catch (error) {
+    const err = error as ApiError;
+    return NextResponse.json({ status: err.response?.data.status ?? 500 });
+  }
+}

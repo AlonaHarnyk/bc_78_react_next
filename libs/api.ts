@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Contact, ContactData, User } from "./types";
+import { Contact, ContactData, User, UserData } from "./types";
 
 const nextServer = axios.create({
-  baseURL: "http:/localhost:3000/api",
+  baseURL: "http://localhost:3000/api",
 });
 
 interface GetContactsProps {
@@ -10,6 +10,11 @@ interface GetContactsProps {
   hasWork?: boolean;
 }
 
+interface User {
+  username: string;
+  email: string;
+  avatar: string;
+}
 export async function getContacts({
   search,
   hasWork,
@@ -39,5 +44,10 @@ export async function getUserById(id: string): Promise<User> {
 export async function addContact(contact: ContactData): Promise<Contact> {
   const { data } = await nextServer.post<Contact>("/contacts", contact);
 
+  return data;
+}
+
+export async function registerUser(userData: UserData) {
+  const { data } = await nextServer.post<User>("/auth/register", userData);
   return data;
 }

@@ -14,3 +14,8 @@ export interface ContactData {
   name: string;
   number: string;
 }
+
+export interface UserData {
+  email: string;
+  password: string;
+}

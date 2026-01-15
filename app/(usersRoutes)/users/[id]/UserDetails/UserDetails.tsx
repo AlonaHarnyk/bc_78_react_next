@@ -13,9 +13,11 @@ export default function UserDetails() {
     refetchOnMount: false,
   });
 
+  console.log(user);
+
   return (
     <>
-      {user && (
+      {/* {user && (
         <>
           <h3>{user.name}</h3>
           <p>Age: {user.age}</p>
@@ -24,7 +26,7 @@ export default function UserDetails() {
             <span>{user.isOnline ? "Yes" : "No"}</span>
           </p>
         </>
-      )}
+      )} */}
     </>
   );
 }
