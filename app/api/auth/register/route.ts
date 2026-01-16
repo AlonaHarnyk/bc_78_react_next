@@ -3,10 +3,11 @@ import { authApi } from "../../api";
 import { ApiError } from "../../types";
 import { cookies } from "next/headers";
 import { parse } from "cookie";
+import { isAxiosError } from "axios";
 
 export async function POST(request: NextRequest) {
   try {
-    const userData = request.json();
+    const userData = await request.json();
     const { data, headers } = await authApi.post("/auth/register", userData);
 
     const cookieStore = await cookies();
@@ -42,7 +43,15 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   } catch (error) {
-    const err = error as ApiError;
-    return NextResponse.json({ status: err.response?.data.status ?? 500 });
+    if (isAxiosError(error)) {
+      return NextResponse.json(
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
+      );
+    }
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

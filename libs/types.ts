@@ -3,12 +3,6 @@ export interface Contact {
   number: string;
   id: string;
 }
-export interface User {
-  age: number;
-  name: string;
-  isOnline: boolean;
-  id: string;
-}
 
 export interface ContactData {
   name: string;
@@ -18,4 +12,10 @@ export interface ContactData {
 export interface UserData {
   email: string;
   password: string;
+}
+
+export interface User {
+  username: string;
+  email: string;
+  avatar: string;
 }

@@ -10,11 +10,10 @@ interface GetContactsProps {
   hasWork?: boolean;
 }
 
-interface User {
-  username: string;
-  email: string;
-  avatar: string;
+interface CheckSessionRequest {
+  success: boolean;
 }
+
 export async function getContacts({
   search,
   hasWork,
@@ -30,17 +29,6 @@ export async function getContactById(id: string): Promise<Contact> {
   return res.data;
 }
 
-export async function getUsers(): Promise<User[]> {
-  const { data } = await nextServer.get<User[]>("/users");
-
-  return data;
-}
-
-export async function getUserById(id: string): Promise<User> {
-  const res = await nextServer.get<User>(`/users/${id}`);
-  return res.data;
-}
-
 export async function addContact(contact: ContactData): Promise<Contact> {
   const { data } = await nextServer.post<Contact>("/contacts", contact);
 
@@ -50,4 +38,16 @@ export async function addContact(contact: ContactData): Promise<Contact> {
 export async function registerUser(userData: UserData) {
   const { data } = await nextServer.post<User>("/auth/register", userData);
   return data;
+}
+
+export async function getMe() {
+  const { data } = await nextServer.get<User>("users/me");
+  return data;
+}
+
+export async function checkSession() {
+  const res = await nextServer.get<CheckSessionRequest>("/auth/session");
+
+  console.log(res.data);
+  return res.data.success;
 }
